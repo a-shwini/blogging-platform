@@ -1,0 +1,47 @@
+{% extends 'accounts/base.html' %}
+{% load static %}
+
+{% block content %}
+<h1>Blog Posts</h1>
+
+<img src="{% static 'image/4.jpg' %}" alt="4.jpg">
+
+
+
+<!--<h1>Welcome to My Django App</h1>
+<p>This is the home page.</p>
+
+<h2>Login</h2>
+<form method="post" action="{% url 'login' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Login</button>
+</form>-->
+{% if posts %}
+    {% for post in posts %}
+        <h2>{{ post.title }}</h2>
+        {% if post.image %} 
+          <img src="{% static 'images/'|add:post.image %}"> 
+        {% endif %} 
+        <p>{{ post.author }}, {{ post.publication_date }}</p>
+        <p>{{ post.content|truncatewords:30 }}</p>
+        <a href="{% url 'post_detail' post.id %}">Read More</a>
+    {% endfor %}
+{% else %}
+    <p>No posts available.</p>
+{% endif %}
+{% if categories %}
+    <h2>Filter by Category:</h2>
+    <ul>
+        {% for category in categories %}
+            <li><a href="{% url 'filter_posts' category.id %}">{{ category.name }}</a></li>
+        {% endfor %}
+    </ul>
+{% endif %}
+<form method="get" action="{% url 'search_posts' %}">
+    <input type="text" name="q" placeholder="Search...">
+    <button type="submit">Search</button>
+</form>
+{% endblock %}
+
+
